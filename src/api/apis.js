@@ -6,10 +6,15 @@ let req = axios.create({
   timeout: 10000, //增加超时限制
   
 })
+// 获取商家
 export function getSeller(){
   return req.get('/api/seller')
 }
-
+// 获取评价
+export function getRatings(){
+  return req.get('/api/ratings')
+}
+// 获取商品
 export function getGoods(id){
   return req.get('/api/goods',{
     params:{

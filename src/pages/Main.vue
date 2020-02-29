@@ -25,7 +25,7 @@
         <div class="header-bottom">
           <img class="header-bottom-img" src="../assets/images/bulletin@2x.png">
           <span class="header-botom-info">{{data.bulletin}}></span>
-
+          <p class="header-botom-button">></p>
         </div>
       </div>
     </div>
@@ -59,7 +59,6 @@ export default {
   created(){
     getSeller().then((res)=>{
       this.data = res.data.data;
-      console.log(res.data.data)
     })
     this.$router.push('/goods')
   },
@@ -76,8 +75,17 @@ body,html{
   flex-direction: column;
 }
 .router-link-div{
-  display: flex;
+   display: flex;
   justify-content: space-between;
+  height: 1rem;
+  a{
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    height: 100%;
+  }
 }
 .header-box{
   position: relative;
@@ -150,7 +158,8 @@ body,html{
     position: absolute;
     bottom:0;
     width: 100%;
-    text-indent: .25rem;
+    display: flex;
+    align-items: center;
     background-color: rgba(0, 0, 0, .3);
     overflow: hidden;
     text-overflow: ellipsis;
@@ -159,28 +168,26 @@ body,html{
     .header-bottom-img{
       width: .4rem;
       height: .3rem;
-      vertical-align: middle;
+      margin-left: .2rem;
     }
     .header-botom-info{
-      width: 80%;
+      flex:1;
       color: #fff;
-      line-height: .55rem;
       margin-left: .15rem;
       font-size: .22rem;
-      margin-right: .3rem;
+      margin-right: .2rem;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
       
+    }
+    .header-botom-button{
+      color: #fff;
+      margin-right: .2rem;
     }
   }
 }
-.router-link-div{
-  height: .8rem;
-  a{
-    flex: 1;
-    text-align: center;
-    height: .8rem;
-    line-height: .8rem;
-  }
-}
+
 
 // 购物车
 .shopcar-bar{
