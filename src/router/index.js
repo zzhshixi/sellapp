@@ -33,11 +33,7 @@ const routes = [
   name:'goods-details',
   component:() => import('../pages/Goodes-details.vue'),
   },
-  {
-    path:'/shopcar',
-    name:'goods-details',
-    component:() => import('../pages/Shopcar.vue'),
-    },
+  
 
 ]
 
