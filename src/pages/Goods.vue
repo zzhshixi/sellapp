@@ -1,21 +1,22 @@
 <template>
+  <div class="goods-box">
   <div class="goods">
-    <div class="goods-aside">
-      <ul class="content">
-        <div
-          @click="ClickmainTitle(index)"
-          :class="{goodsAsideItem:true, selected : index === currentIndex}"
-          v-for="(item, index) in data"
-          :key="index"
-        >
-          <span class="goods-item-name">
-          <img style="width: 12px" v-show="item.type == 1" src="../assets/images/discount_1@2x.png" />
-          <img style="width: 12px" v-show="item.type == 2" src="../assets/images/decrease_1@2x.png" />
-          <img style="width: 12px" v-show="item.type == 3" src="../assets/images/special_1@2x.png" /> 
-            {{item.name}}
-            </span>
-        </div>
-      </ul>
+      <div class="goods-aside">
+        <ul class="content">
+          <div
+            @click="ClickmainTitle(index)"
+            :class="{goodsAsideItem:true, selected : index === curSelected}"
+            v-for="(item, index) in data"
+            :key="index"
+          >
+            <span class="goods-item-name">
+            <img style="width: 12px" v-show="item.type == 1" src="../assets/images/discount_1@2x.png" />
+            <img style="width: 12px" v-show="item.type == 2" src="../assets/images/decrease_1@2x.png" />
+            <img style="width: 12px" v-show="item.type == 3" src="../assets/images/special_1@2x.png" /> 
+              {{item.name}}
+              </span>
+          </div>
+        </ul>
     </div>
     <router-link to="/goods/goods-details" tag="div" class="goods-main">
       <ul class="content">
@@ -38,6 +39,7 @@
       </ul>
     </router-link>
   </div>
+  </div>
 </template>
 
 <script>
@@ -48,36 +50,49 @@ export default {
     return {
       data: [], //食品数组
       scrollY: 0,
-      listHeight: []
+      curSelected:0
     };
   },
   created() {
     getGoods(this.$route.query.id).then(res => {
       this.data = res.data.data;
       this.dataFoods = this.data.map(obj => obj.foods);
-      console.log(this.data)
     });
   },
   mounted() {
     new Bscroll(document.querySelector(".goods-aside"), {
-      click: true
+      click: true,
+      scrollY: true, 
     });
-    // 定事调用方法 优化性能
-    setTimeout(() => {
-      this._initScroll();
-      this.calculateHeight();
-    }, 300);
+    this.main = new Bscroll(document.querySelector(".goods-main"), {
+        probeType: 3
+      }),
+    this.main.on("scroll", obj => {
+      this.scrollY = Math.abs(Math.round(obj.y));
+      this.calculateHeight
+      for(var i of this.calculateHeight){
+   
+        if(this.scrollY>i.min && this.scrollY<i.max){
+     
+          this.curSelected = i.index
+          return
+        }
+
+      }
+      });
+
   },
   computed: {
-    currentIndex() {
-      for (let i = 0; i < this.listHeight.length; i++) {
-        let height1 = 0;
-        let height2 = this.listHeight[i];
-        if (!height2 || (this.scrollY >= height1 && this.scrollY < height2)) {
-          return i;
-        }
+     calculateHeight(){
+      var arr = [];
+      var totalHeight = 0;
+      for(let i=0;i<this.data.length;i++){
+        var curHeight = document.getElementById(i).offsetHeight;
+        // arr.push({min:i == 0?0 : totalHeight-curHeight,max:totalHeight,index:i})
+        arr.push({min:totalHeight,max:totalHeight+curHeight,index:i})
+        totalHeight += curHeight;
       }
-      return 0;
+      return arr
     }
   },
   methods: {
@@ -85,25 +100,7 @@ export default {
       this.curSelected = index;
       this.main.scrollToElement(document.getElementById(index), 300);
     },
-    // 初始化滚动距离和事件
-    _initScroll() {
-      (this.main = new Bscroll(document.querySelector(".goods-main"), {
-        probeType: 3
-      })),
-        this.main.on("scroll", obj => {
-          this.scrollY = Math.abs(Math.round(obj.y));
-        });
-    },
-    // 计算每个区间的高度
-    calculateHeight() {
-      var contentWrapper = this.$refs.foodList;
-      var height = 0;
-      contentWrapper.map((val, i) => {
-        let item = contentWrapper[i];
-        height += item.clientHeight; // 获得每个区间的高度
-        this.listHeight.push(height);
-      });
-    }
+   
   }
 };
 </script>
@@ -112,15 +109,24 @@ export default {
 .selected {
   background-color: #fff;
 }
+.goods-box{
+  position: relative;
+  flex: 1;
+}
 .goods {
+  position: absolute;
+  top: 0;
+  left:0;
   display: flex;
   border-top: 0.02rem solid #ccc;
   height: 100%;
+  width: 100%;
   .goods-aside {
     width: 90px;
     background: #f3f6f6;
     height: auto;
     overflow: hidden;
+  
     .goodsAsideItem {
       height: 1rem;
       display: flex;

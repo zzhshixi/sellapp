@@ -48,6 +48,7 @@
 </template>
 
 <script>
+import '@/assets/styles/commons/reset.css'
 import '@/assets/styles/commons/border.css'
 import { getSeller } from '../api/apis'
 export default {
@@ -194,7 +195,6 @@ body,html{
   height: 1rem;
   width: 100%;
   background-color: #121e25;
-  position: fixed;
   bottom: 0;
   line-height: 1rem;
   display: flex;

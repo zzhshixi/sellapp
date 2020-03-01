@@ -6,7 +6,7 @@
 
 <script>
 
-import './assets/styles/commons/reset.css'
+
 export default {
   
 }
