@@ -10,13 +10,12 @@
         <i-Col span="14" class="header-right">
           <p>
             服务态度
-            <Icon type="ios-star" v-for="(n,index) in 4" :key="index"></Icon>
-            <Icon type="ios-star-half"></Icon>
-          </p>
+            <Rate class="start" allow-half :value.sync="4.5">
+              </Rate>
           <p>
             服务态度
-            <Icon type="ios-star" v-for="(n,index) in 4" :key="index"></Icon>
-            <Icon type="ios-star-half"></Icon>
+            <Rate class="start" allow-half :value.sync="4.5">
+            </Rate>
           </p>
           <p class="deliverTime">
             送达时间
@@ -45,9 +44,7 @@
           </p>
           <p>
             <span>
-              <Icon type="ios-star" v-for="(n,index) in item.score-1" :key="index" color="orange"></Icon>
-              <Icon type="ios-star" color="orange" v-if="item.score >= (item.score - 0.5)"></Icon>
-              <Icon color="orange" type="ios-star-half" v-else></Icon>
+             <Rate class="start" allow-half :value.sync="item.score"></Rate>
             </span>
             <span >{{item.deliveryTime}}分钟送达</span>
           </p>
@@ -100,6 +97,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
+
 .header {
   padding: 0.2rem 0;
   height: auto;
@@ -110,7 +108,7 @@ export default {
     padding: 0 0.3rem;
   }
     .deliverTime{
-      margin-left: -.55rem;
+      margin-left: -1.55rem;
   }
 }
 .style {
@@ -151,6 +149,7 @@ export default {
       display: flex;
       justify-content: space-between;
     }
+    
     .ivu-btn-group {
       margin-left: 0.01rem;
       button {
@@ -163,4 +162,7 @@ export default {
     }
   }
 }
+.start{
+      font-size:16px;
+    }
 </style>

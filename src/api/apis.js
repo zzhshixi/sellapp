@@ -22,3 +22,5 @@ export function getGoods(id){
     }
   })
 }
+
+

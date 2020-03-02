@@ -27,12 +27,12 @@
             <div class="goods-main-info">
               <h3 class="goods-info-name">{{items.name}}</h3>
               <p class="good-info-description">{{items.description}}</p>
-              <p>月售{{items.sellCount}}好评率{{items.rating}}%</p>
+              <p>月售{{items.sellCount}}  好评率{{items.rating}}%</p>
               <p class="price-box">
                 <span>
 
                   <span class="newPrice">￥{{items.price}}</span>
-                  <span class="oldPrice">￥{{items.oldPrice}}</span>
+                  <span v-show="items.oldPrice" class="oldPrice">￥{{items.oldPrice}}</span>
                 </span>
                 <span class="btn-add">
                   <button @click="numdown(items.name)" v-show="items.num > 0"  class="goods-main-btn">-</button>
@@ -43,6 +43,7 @@
               </p>
             </div>
           </div>
+         
         </div>
       </ul>
       
@@ -115,6 +116,7 @@ export default {
       this.$store.commit('numadd',val)
       this.$store.commit('selectedlist')
     },
+    // 商品数量减少
     numdown(val){
       this.$store.commit('numdown',val)
       this.$store.commit('selectedlist')

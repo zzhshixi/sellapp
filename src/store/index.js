@@ -13,18 +13,31 @@ export default new Vuex.Store({
       state.list = val
     },
     selectedlist(state){
-
+    state.selectedList = []
       for(let title of state.list){
-          state.selectedList = title.foods.filter(obj=>obj.num != 0)
+        for(let i of title.foods){
+          if(i.num>0){
+            state.selectedList.push(i)
+          }
+        }
       }
-     
+    },
+    // 清空选中项
+    deleteSeleted(state){
+    state.selectedList = []
+    state.totalPrice = 0
+    for(let title of state.list){
+      for(let child of title.foods){
+        child.num = 0
+        }
+      } 
     },
     // 商品数量添加
     numadd(state,val){
       for(let title of state.list){
         for(let child of title.foods){
           if(child.name == val){
-            child.num += 1 || -1
+            child.num += 1 
             state.totalPrice += child.price
             return
           }
@@ -35,7 +48,7 @@ export default new Vuex.Store({
       for(let title of state.list){
         for(let child of title.foods){
           if(child.name == val){
-            child.num -= 1 || -1
+            child.num -= 1
             state.totalPrice -= child.price
             return
           }

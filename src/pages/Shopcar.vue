@@ -1,14 +1,13 @@
 <template>
-  <div>
+  <div class="goods-main-container">
     <div class="goods-main">
       <ul class="content">
-        <div :id="index" ref="foodList" v-for="(item, index) in goodsList" :key="index">
           <div class="goods-main-content" v-for="(items, index) in goodsList" :key="index">
             <img class="goods-main-img" :src="items.image" />
             <div class="goods-main-info">
               <h3 class="goods-info-name">{{items.name}}</h3>
               <p class="good-info-description">{{items.description}}</p>
-              <p>月售{{items.sellCount}}好评率{{items.rating}}%</p>
+              <p>月售{{items.sellCount}}  好评率{{items.rating}}%</p>
               <p class="price-box">
                 <span>
                   <span class="newPrice">￥{{items.price}}</span>
@@ -25,7 +24,6 @@
                 </span>
               </p>
             </div>
-          </div>
         </div>
       </ul>
     </div>
@@ -39,17 +37,32 @@ export default {
       return this.$store.state.selectedList;
     }
   },
+  methods:{
+    numadd(val){
+      this.$store.commit('numadd',val)
+      this.$store.commit('selectedlist')
+    },
+    numdown(val){
+      this.$store.commit('numdown',val)
+      this.$store.commit('selectedlist')
+
+    }
+  }
 
 };
 </script>
 
 <style lang="less" scoped>
+.goods-main-container{
+  flex: 1;
+  overflow: scroll;
+  margin-bottom: 1rem;
+}
 .goods-main {
   flex: 1;
-  height: auto;
-  overflow: hidden;
+  height: 100%;
   .goods-main-content {
-    padding: 0.35rem 0 0 0.35rem;
+    padding: 0.35rem 0 0 .35rem;
     height: 2.2rem;
     display: flex;
     position: relative;
@@ -60,6 +73,7 @@ export default {
     }
     .goods-main-info {
       margin-left: 0.2rem;
+      width: 100%;
       .good-info-description {
         width: 200px;
         white-space: nowrap;

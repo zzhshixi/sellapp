@@ -1,119 +1,148 @@
 <template>
-  <div >
-   <div class="title">
-     <div class="title-info">
-       <div class="title-info-left">
-         <p>粥品相仿（大运村）</p>
-         <p>xxxxxxx</p>
-       </div>
-       <div class="title-info-right">
-         <p><Icon type="ios-calendar" /></p>
-         <p>收藏</p>
-       </div>
-     </div>
-     <div class="title-msg">
-       <div>
-         <p>起送价</p>
-         <p>20</p>
-       </div>
+  <div>
+    <div class="title">
+      <div class="title-info">
+        <div class="title-info-left">
+          <p>{{data.name}}</p>
+          <p>
+            <Rate class="start" allow-half :value.sync="data.score">
+
+              </Rate>(661) 月售693单
+          </p>
+        </div>
+        <div class="title-info-right">
+          <p>
+            <Icon style="color:red" type="md-heart" />
+          </p>
+          <p>收藏</p>
+        </div>
+      </div>
+      <div class="title-msg">
         <div>
-         <p>商家配送</p>
-         <p>4元</p>
-       </div>
+          <p>起送价</p>
+          <p>{{data.minPrice}}元</p>
+        </div>
         <div>
-         <p>评价配送时间</p>
-         <p>39分钟</p>
-       </div>
-     </div>
-   </div>
+          <p>商家配送</p>
+          <p>{{data.deliveryPrice}}元</p>
+        </div>
+        <div>
+          <p>评价配送时间</p>
+          <p>{{data.deliveryTime}}分钟</p>
+        </div>
+      </div>
+    </div>
     <div class="style"></div>
     <div class="content">
       <List size="small">
-              <h1>公告活动</h1>
-            <ListItem>
-               粥品相仿其烹饪粥料的秘方来源于中国前年， 粥品相仿其烹饪粥料的秘方来源于中国前年 粥品相仿其烹饪粥料的秘方来源于中国前年 粥品相仿其烹饪粥料的秘方来源于中国前年 粥品相仿其烹饪粥料的秘方来源于中国前年   
-            </ListItem>
-            <ListItem><Icon type="ios-checkmark" />在线支付满25减5，满40减1</ListItem>
-           <ListItem><Icon type="ios-checkmark" />在线支付满25减5，满40减1</ListItem>
-           <ListItem><Icon type="ios-checkmark" />在线支付满25减5，满40减1</ListItem>
-           <ListItem><Icon type="ios-checkmark" />在线支付满25减5，满40减1</ListItem>
-           <ListItem><Icon type="ios-checkmark" />在线支付满25减5，满40减1</ListItem>
-           <ListItem><Icon type="ios-checkmark" />在线支付满25减5，满40减1</ListItem>
-           <ListItem><Icon type="ios-checkmark" />在线支付满25减5，满40减1</ListItem>
-        </List>
+        <h1>公告活动</h1>
+        <div class="content-container">
+
+          <ListItem style="color:red">{{data.bulletin}}</ListItem>
+          <ListItem v-for="(content, index) in data.supports" :key="index">
+            <img style="width: 12px" v-show="content.type == 1" src="../assets/images/discount_1@2x.png" />
+              <img style="width: 12px" v-show="content.type == 2" src="../assets/images/decrease_1@2x.png" />
+              <img style="width: 12px" v-show="content.type == 3" src="../assets/images/special_1@2x.png" /> 
+            {{content.description}}
+          </ListItem>
+        </div>
+        
+      </List>
     </div>
     <div class="style"></div>
     <div class="Merchants-live">
       <List size="small">
-              <h1>商家实景</h1>
-            
-            <ListItem><img class="Merchants-live-img" src="../assets/images/main/1.jpg"><img class="Merchants-live-img" src="../assets/images/main/1.jpg"><img class="Merchants-live-img" src="../assets/images/main/1.jpg"></ListItem>
-          
-        </List>
+        <h1>商家实景</h1>
+        <div class="seller-img">
+
+          <ListItem  v-for="(item, index) in data.pics" :key="index">
+            <img class="Merchants-live-img" :src="item" />
+          </ListItem>
+        </div>
+      </List>
     </div>
     <div class="style"></div>
     <div class="Merchants-info">
       <List size="small">
-              <h1>商家信息</h1>
-            <ListItem>在线支付满25减5，满40减1</ListItem>
-           <ListItem>在线支付满25减5，满40减1</ListItem>
-           <ListItem>在线支付满25减5，满40减1</ListItem>
-           <ListItem>在线支付满25减5，满40减1</ListItem>
-           <ListItem>在线支付满25减5，满40减1</ListItem>
-           <ListItem>在线支付满25减5，满40减1</ListItem>
-           
-        </List>
+        <h1>商家信息</h1>
+        <div class="Merchants-info-container">
+
+        <ListItem v-for="(info, index) in data.infos" :key="index">{{info}}</ListItem>
+        </div>
+      </List>
     </div>
   </div>
 </template>
 
 <script>
-  export default {
-    
+import { getSeller } from "../api/apis";
+export default {
+  data() {
+    return {
+      data: {}
+    };
+  },
+  created() {
+    getSeller().then(res => {
+      this.data = res.data.data;
+      console.log(this.data)
+    });
   }
+};
 </script>
 
 <style lang="less" scoped>
-.style{
-  height: .5rem;
-  background-color: #f3f6f6;   
+.style {
+  height: 0.5rem;
+  background-color: #f3f6f6;
 }
-.title-info{
+.title-info {
   display: flex;
-  padding: .3rem;
+  padding: 0.3rem;
   justify-content: space-between;
-  border-bottom: .02rem solid #ccc;
+  border-bottom: 0.02rem solid #ccc;
+  .title-info-right{
+    text-align: center;
+  }
 }
-.title-msg{
-  
-  padding: .2rem 0;
+.title-msg {
+  padding: 0.2rem 0;
   display: flex;
   justify-content: space-around;
-  border-bottom: .02rem solid #ccc;
-  div{
+  border-bottom: 0.02rem solid #ccc;
+  div {
     width: 100%;
-    border-right: .02rem solid #ccc;
-    text-align: center; 
+    border-right: 0.02rem solid #ccc;
+    text-align: center;
   }
 }
-.content{
-  padding: .2rem;
-}
-.Merchants-live{
-  padding: .2rem;
-  display: flex;
-  justify-content: space-betwee;
-  .Merchants-live-img{
-    width: 2.1rem;
-    height: 1.65rem;
-    margin-left:.2rem;
-    overflow: hidden;
+.content {
+  padding: 0.2rem;
+  .content-container{
+    padding-left: .2rem;
   }
 }
-.Merchants-info{
-  padding: .2rem;
-  li{
-    text-indent: .4rem;
+.Merchants-live {
+  padding: 0.2rem;
+  .seller-img {
+    display: flex;
+    justify-content: space-between;
+    .Merchants-live-img {
+      width: 1.55rem;
+      height: 1.65rem;
+      margin-left: 0.2rem;
+      overflow: hidden;
+    }
   }
+}
+.Merchants-info {
+  padding: 0.2rem;
+  padding-bottom: 1rem;
+  .Merchants-info-container{
+    padding-left: .4rem;
+  }
+}
+.start {
+  font-size: 16px;
 }
 </style>

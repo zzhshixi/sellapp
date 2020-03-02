@@ -30,17 +30,20 @@
     </div>
     <!-- 二级路由出口 -->
     <div class="router-link-div border-bottom">
-      <router-link :to="{path:'/goods',query:{id:this.data.id}}">商品</router-link>
-      <router-link to="/appraise">评价</router-link>
-      <router-link to="/merchant">商家</router-link>
+      <router-link :class="{'route-active':this.$route.path == '/goods'}" :to="{path:'/goods',query:{id:this.data.id}}">商品</router-link>
+      <router-link :class="{'route-active':this.$route.path == '/appraise'}" to="/appraise">评价</router-link>
+      <router-link :class="{'route-active':this.$route.path == '/merchant'}" to="/merchant">商家</router-link>
     </div>
     <router-view></router-view>
     <transition name="slide-fade">
       <div class="shopcar-board" v-show="show">
-        <div class="shop-board-title"></div>
-        <div class="shop-board-title1">
-          <span>已选商品</span>
-          <span>清空</span>
+        <div class="shop-board-title-container">
+          <div class="shop-board-title"></div>
+          <div class="shop-board-title1">
+            <span>已选商品</span>
+            <span @click="deleteAll">清空</span>
+          </div>
+
         </div>
         <shop-car></shop-car>
       </div>
@@ -53,6 +56,9 @@
       <span>另需配送费￥4元</span>
       <span class="start">20起送</span>
     </div>
+    <!-- <div class="header-nums-description">
+      <Rate :value.sync="4.5"></Rate>
+    </div> -->
   </div>
 </template>
 
@@ -73,14 +79,24 @@ export default {
   },
   methods: {
     shopcarshow() {
-      this.show = !this.show;
+      if (this.$store.state.selectedList.length > 0) {
+        this.show = !this.show;
+      } else {
+        return false;
+      }
+    },
+    deleteAll() {
+      this.$store.commit("deleteSeleted");
+      this.show = false;
     }
   },
   created() {
     getSeller().then(res => {
       this.data = res.data.data;
     });
-    this.$router.push("/goods");
+    this.$router.push("/goods").catch(error => {
+      console.log(error);
+    });
   },
   computed: {
     totalPrice() {
@@ -103,6 +119,10 @@ html {
   display: flex;
   justify-content: space-between;
   height: 1rem;
+  border-bottom: 1px solid #ccc;
+  .route-active{
+    color: red;
+  }
   a {
     flex: 1;
     display: flex;
@@ -150,6 +170,7 @@ html {
       .data-description {
         font-size: 0.26rem;
       }
+
       .title-icon {
         height: 0.35rem;
         width: 0.6rem;
@@ -214,27 +235,33 @@ html {
 // 购物车
 .shopcar-board {
   background: #fff;
-  height: 6rem;
+  position: relative;
+  max-height: 7rem;
+  height: auto;
+  display: flex;
+  flex-direction: column;
   width: 100%;
-  overflow: scroll;
-  .shop-board-title {
-    position: relative;
-    z-index: 3;
-    top: 0;
-    left: 0;
+  .shop-board-title-container{
     width: 100%;
-    height: 0.4rem;
-    background: #fafaad;
-  }
-  .shop-board-title1 {
-    z-index: 3;
-    position: relative;
-    height: 0.8rem;
-    background: rgb(240, 240, 233);
-    display: flex;
-    padding: 0 0.3rem;
-    align-items: center;
-    justify-content: space-between;
+    .shop-board-title {
+      position: relative;
+      z-index: 3;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 0.4rem;
+      background: #fafaad;
+    }
+    .shop-board-title1 {
+      z-index: 3;
+      position: relative;
+      height: 0.8rem;
+      background: rgb(240, 240, 233);
+      display: flex;
+      padding: 0 0.3rem;
+      align-items: center;
+      justify-content: space-between;
+    }
   }
 }
 .shopcar-bar {
@@ -275,6 +302,14 @@ html {
     width: 2.14rem;
     text-align: center;
   }
+}
+.header-nums-description {
+  display: block;
+  z-index: 999;
+  background: rgba(0,0,0,0.6);
+  position: fixed;
+  width: 100%;
+  height: 100%;
 }
 // 购物车效果设置
 .slide-fade-enter-active {
