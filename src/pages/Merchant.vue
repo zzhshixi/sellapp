@@ -85,13 +85,14 @@ export default {
   created() {
     getSeller().then(res => {
       this.data = res.data.data;
-      console.log(this.data)
+   
     });
   }
 };
 </script>
 
 <style lang="less" scoped>
+
 .style {
   height: 0.5rem;
   background-color: #f3f6f6;

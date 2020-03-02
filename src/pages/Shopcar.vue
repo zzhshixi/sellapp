@@ -11,7 +11,7 @@
               <p class="price-box">
                 <span>
                   <span class="newPrice">￥{{items.price}}</span>
-                  <span class="oldPrice">￥{{items.oldPrice}}</span>
+                  <span v-show="items.oldPrice" class="oldPrice">￥{{items.oldPrice}}</span>
                 </span>
                 <span class="btn-add">
                   <button

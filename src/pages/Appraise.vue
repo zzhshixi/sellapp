@@ -90,7 +90,6 @@ export default {
   created() {
     getRatings().then(res => {
       this.Appraise = res.data.data;
-      console.log(this.Appraise);
     });
   }
 };
